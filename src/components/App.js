@@ -27,11 +27,11 @@ class App extends Component {
     axios.get(`https://uxcandy.com/~shapoval/test-task-backend/v2/?developer=${DEVELOPER}&page=${pageNumber}`)
       .then(response => {
         if (response.status === 200) this.setState({ items: response.data.message.tasks, totalItemsCount: Number(response.data.message.total_task_count), activePage: pageNumber });
-        console.log('response', response);
+       
       })
   }
   handlePageChange(pageNumber) {
-    console.log(`active page is ${pageNumber}`);
+  
     this.setState({ activePage: pageNumber });
   }
   componentWillReceiveProps(nextProps) {

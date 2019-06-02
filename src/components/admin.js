@@ -13,6 +13,11 @@ class Admin extends Component {
         if (window.localStorage.getItem('time')) {
             let time = Number(window.localStorage.getItem('time'));
             hide = (new Date().getTime() >= time) ? false : true;
+            if (!hide) 
+            {
+                window.localStorage.removeItem('time');
+                window.localStorage.removeItem('token');
+            }
            
         }
         this.state = {
@@ -40,7 +45,7 @@ class Admin extends Component {
                     this.setState({ hide: true });
                     this.props.oninitAdminMode();
                 }
-                console.log(response);
+              
             })
             .catch(function (error) {
                 console.log(error);

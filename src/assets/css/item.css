@@ -9,6 +9,11 @@
 }
 
 .item .demoForm {
+  width: 100%;
   display: none;
+}
+
+.item .demoForm .panel {
+  padding: 15px;
 }
 /*# sourceMappingURL=item.css.map */

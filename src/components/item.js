@@ -12,17 +12,17 @@ class Item extends Component {
   blockEdit = (window.localStorage.getItem('token')) ? false : true;
   constructor(props) {
     super(props);
-    
-    console.log('props', props);
+
+  
     this.onEdit = this.onEdit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit(e) {
     e.preventDefault();
-   
+
     const node = ReactDOM.findDOMNode(this);
-   let status = ( node.querySelector("input[name='status']").checked) ? 10 : 0;
-   let text = node.querySelector("textarea[name='text']").value;
+    let status = (node.querySelector("input[name='status']").checked) ? 10 : 0;
+    let text = node.querySelector("textarea[name='text']").value;
     var form = new FormData();
     form.append("token", this.token);
     form.append("text", text);
@@ -30,10 +30,10 @@ class Item extends Component {
     axios.post(`https://uxcandy.com/~shapoval/test-task-backend/v2/edit/${this.props.item.id}?developer=${DEVELOPER}`, form)
       .then((response) => {
         if (response.status === 200) {
-         this.props.updateTask(this.props.item.id,status,text);
-        this.onClosedEditMode();
+          this.props.updateTask(this.props.item.id, status, text);
+          this.onClosedEditMode();
         }
-        console.log(response);
+        
       })
       .catch(function (error) {
         console.log(error);
@@ -48,11 +48,11 @@ class Item extends Component {
     node.querySelector("textarea[name='text']").value = this.props.item.text;
     node.querySelector("input[name='status']").checked = (this.props.item.status === 0) ? false : true;
     node.querySelector(".demoForm").style.display = "block";
-   
+
   }
-  componentDidMount () {
+  componentDidMount() {
     const node = ReactDOM.findDOMNode(this);
-   
+
     node.querySelector(".edit-mode").style.display = (this.blockEdit) ? "none" : "inline-block";
   }
   componentWillReceiveProps(nextProps) {
@@ -64,38 +64,54 @@ class Item extends Component {
   render() {
     return (
       <div className="item" >
-        <div className="item-name"><p>{this.props.item.username}</p></div>
-        <div className="item-email"><p>{this.props.item.email}</p></div>
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <h3 className="panel-title">User: {this.props.item.username}</h3>
+          </div>
+          <div className="panel-body">
+            <p>Task: {this.props.item.text}</p>
+            <p>Email: {this.props.item.email}</p>
+            <p>Status: {(this.props.item.status === 0) ? "Not done" : "done"}</p>
 
-        <div className="item-text"><p>{this.props.item.text}</p></div>
-        <div className="item-status"><p>{this.props.item.status}</p></div>
-        <form className="demoForm" onSubmit={this.handleSubmit} >
-          <div className="form-group">
-            <label htmlFor="text">Text</label>
-            <textarea required className="form-control" name="text"
-              placeholder="text" ></textarea>
+
+
+            
+            <form className="demoForm" onSubmit={this.handleSubmit} >
+              <div className="panel panel-default">
+                <h3>Edit task</h3>
+              <div className="form-group">
+                <label htmlFor="text">Text</label>
+                <textarea required className="form-control" name="text"
+                  placeholder="text" ></textarea>
+              </div>
+              <div className="form">
+                <label htmlFor="status">Status</label>
+                <input type="checkbox" name="status" />
+              </div>
+              <button type="submit" className="btn btn-primary" >Save</button>
+              <button type="button" className="btn btn-default" onClick={this.onClosedEditMode}>Closed</button>
+              </div>
+            </form>
+            
+            <button type="button" className="btn btn-default edit-mode" onClick={this.onEdit}>Edit</button>
           </div>
-          <div className="form">
-            <label htmlFor="status">Status</label>
-            <input type="checkbox" name="status"  />
-          </div>
-          <button type="submit" className="btn btn-primary" >Save</button>
-          <button type="button" className="btn btn-default" onClick={this.onClosedEditMode}>Closed</button>
-        </form>
-        <button type="button" className="btn btn-default edit-mode" onClick={this.onEdit}>Edit</button>
+
+        </div>
+
+
       </div>
     );
   }
 }
 
 let mapStateToProps = state => {
-  return {admin: state.adminState};
+  return { admin: state.adminState };
 };
 
 let mapDispatchToProps = dispatch => {
   return {
-    updateTask: (id,status,text) => {
-      dispatch(updateTask(id,status,text));
+    updateTask: (id, status, text) => {
+      dispatch(updateTask(id, status, text));
     }
   };
 };
