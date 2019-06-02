@@ -3,4 +3,12 @@
   width: 100%;
   height: auto;
 }
+
+.item .edit-mode {
+  display: none;
+}
+
+.item .demoForm {
+  display: none;
+}
 /*# sourceMappingURL=item.css.map */

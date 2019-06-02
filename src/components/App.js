@@ -5,6 +5,7 @@ import Pagination from "react-js-pagination";
 import { connect } from "react-redux";
 import Item from "./item";
 import AddItem from "./add-item";
+import Admin from "./admin";
 import { DEVELOPER,COUNT_IN_PAGE } from "../constants/main";
 import { ADD_TASK } from "../constants/add-task";
 import "../assets/css/reset.css";
@@ -57,6 +58,7 @@ class App extends Component {
             return <Item item={item} key={index} />
           })
         }
+  
         <Pagination
           activePage={this.state.activePage}
           itemsCountPerPage={3}

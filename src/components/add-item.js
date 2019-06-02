@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import axios from 'axios'
+import axios from 'axios';
 import { FormErrors } from './FormErrors';
 import { DEVELOPER } from "../constants/main";
 import { STATE_ADD_TASK } from "../constants/add-task";
@@ -25,7 +25,6 @@ class AddItem extends Component {
           this.setState(STATE_ADD_TASK);
           this.props.AddTask(response.data.message);
         }
-        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
