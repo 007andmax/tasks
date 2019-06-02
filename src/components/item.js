@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import axios from 'axios';
 import { DEVELOPER } from "../constants/main";
 import { ADMIN_MODE } from "../constants/admin";
+import { updateTask } from "../actions/admin";
 import ReactDOM from "react-dom";
 import "../assets/css/item.css";
 
@@ -11,17 +12,17 @@ class Item extends Component {
   blockEdit = (window.localStorage.getItem('token')) ? false : true;
   constructor(props) {
     super(props);
-
+    
     console.log('props', props);
     this.onEdit = this.onEdit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit(e) {
     e.preventDefault();
-
+   
     const node = ReactDOM.findDOMNode(this);
-    let status = (node.querySelector("input[name='status']").checked) ? 10 : 0;
-    let text = node.querySelector("textarea[name='text']").value;
+   let status = ( node.querySelector("input[name='status']").checked) ? 10 : 0;
+   let text = node.querySelector("textarea[name='text']").value;
     var form = new FormData();
     form.append("token", this.token);
     form.append("text", text);
@@ -29,8 +30,8 @@ class Item extends Component {
     axios.post(`https://uxcandy.com/~shapoval/test-task-backend/v2/edit/${this.props.item.id}?developer=${DEVELOPER}`, form)
       .then((response) => {
         if (response.status === 200) {
-
-
+         this.props.updateTask(this.props.item.id,status,text);
+        this.onClosedEditMode();
         }
         console.log(response);
       })
@@ -38,16 +39,20 @@ class Item extends Component {
         console.log(error);
       });
   }
+  onClosedEditMode = () => {
+    const node = ReactDOM.findDOMNode(this);
+    node.querySelector(".demoForm").style.display = "none";
+  }
   onEdit() {
     const node = ReactDOM.findDOMNode(this);
     node.querySelector("textarea[name='text']").value = this.props.item.text;
     node.querySelector("input[name='status']").checked = (this.props.item.status === 0) ? false : true;
     node.querySelector(".demoForm").style.display = "block";
-
+   
   }
-  componentDidMount() {
+  componentDidMount () {
     const node = ReactDOM.findDOMNode(this);
-
+   
     node.querySelector(".edit-mode").style.display = (this.blockEdit) ? "none" : "inline-block";
   }
   componentWillReceiveProps(nextProps) {
@@ -72,12 +77,11 @@ class Item extends Component {
           </div>
           <div className="form">
             <label htmlFor="status">Status</label>
-            <input type="checkbox" name="status" />
+            <input type="checkbox" name="status"  />
           </div>
           <button type="submit" className="btn btn-primary" >Save</button>
+          <button type="button" className="btn btn-default" onClick={this.onClosedEditMode}>Closed</button>
         </form>
-
-
         <button type="button" className="btn btn-default edit-mode" onClick={this.onEdit}>Edit</button>
       </div>
     );
@@ -85,12 +89,14 @@ class Item extends Component {
 }
 
 let mapStateToProps = state => {
-  return { admin: state.adminState };
+  return {admin: state.adminState};
 };
 
 let mapDispatchToProps = dispatch => {
   return {
-
+    updateTask: (id,status,text) => {
+      dispatch(updateTask(id,status,text));
+    }
   };
 };
 export default connect(

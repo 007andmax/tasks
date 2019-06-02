@@ -8,6 +8,7 @@ import AddItem from "./add-item";
 import Admin from "./admin";
 import { DEVELOPER,COUNT_IN_PAGE } from "../constants/main";
 import { ADD_TASK } from "../constants/add-task";
+import { UPDATE_TASK } from "../constants/admin";
 import "../assets/css/reset.css";
 import "../assets/css/bootstrap.min.css";
 import "../assets/css/app.css";
@@ -43,6 +44,13 @@ class App extends Component {
         this.setState({totalItemsCount : totalItemsCount});
       }
     }
+    if (nextProps.admin && nextProps.admin.action === UPDATE_TASK) {
+      let items = this.state.items;
+      let index = items.findIndex(item => item.id === nextProps.admin.id);
+      items[index].status = nextProps.admin.status;
+      items[index].text = nextProps.admin.text;
+      this.setState({items: items});
+    }
 
   }
   render() {
@@ -72,7 +80,8 @@ class App extends Component {
   }
 }
 let mapStateToProps = state => {
-  return { tasks: state.itemsState };
+  return { tasks: state.itemsState ,
+    admin: state.adminState };
 };
 let mapDispatchToProps = dispatch => {
   return {

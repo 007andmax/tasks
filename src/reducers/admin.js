@@ -1,5 +1,5 @@
 
- import {ADMIN_MODE } from "../constants/admin";
+ import {ADMIN_MODE,UPDATE_TASK } from "../constants/admin";
 
 
  const initialState = {};
@@ -7,6 +7,8 @@
    switch (action.type) {
      case ADMIN_MODE:
        return { action: ADMIN_MODE };
+      case UPDATE_TASK:
+       return { action: UPDATE_TASK,id:action.id,status:action.status,text:action.text };
      default:
        return null;
    }
